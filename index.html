@@ -435,54 +435,122 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background-color: rgba(0, 0, 0, 0.5);
+            background: linear-gradient(180deg, rgba(0,0,0,0.8) 0%, rgba(20,0,0,0.9) 100%);
             z-index: 2000;
             justify-content: center;
             align-items: center;
             flex-direction: column;
-            gap: 40px;
+            gap: 50px;
+            animation: fadeIn 0.5s ease;
         }
 
         #gameOverOverlay.active {
             display: flex;
         }
 
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+
         .gameover-text {
-            font-family: 'Malgun Gothic', 'Apple SD Gothic Neo', sans-serif;
+            font-family: 'Silkscreen', 'Malgun Gothic', monospace;
             font-weight: bold;
-            font-size: 80px;
+            font-size: 100px;
             color: #FF0000;
-            -webkit-text-stroke: 3px #FFFFFF;
-            text-stroke: 3px #FFFFFF;
+            -webkit-text-stroke: 5px #FFFFFF;
+            text-stroke: 5px #FFFFFF;
             text-shadow:
-                3px 3px 0 #FFFFFF,
-                6px 6px 0 #000000;
+                5px 5px 0 #FFFFFF,
+                10px 10px 0 #000000,
+                0 0 20px rgba(255, 0, 0, 0.8),
+                0 0 40px rgba(255, 0, 0, 0.5);
+            animation: gameOverPulse 1.5s ease-in-out infinite, gameOverShake 0.5s ease;
+            letter-spacing: 8px;
+        }
+
+        @keyframes gameOverPulse {
+            0%, 100% {
+                transform: scale(1);
+            }
+            50% {
+                transform: scale(1.05);
+            }
+        }
+
+        @keyframes gameOverShake {
+            0%, 100% {
+                transform: translateX(0) scale(1);
+            }
+            10%, 30%, 50%, 70%, 90% {
+                transform: translateX(-10px) scale(1.02);
+            }
+            20%, 40%, 60%, 80% {
+                transform: translateX(10px) scale(1.02);
+            }
         }
 
         .menu-button {
-            font-family: 'Malgun Gothic', 'Apple SD Gothic Neo', sans-serif;
+            font-family: 'Silkscreen', 'Malgun Gothic', monospace;
             font-weight: bold;
             width: 300px;
             padding: 20px 40px;
-            font-size: 28px;
+            font-size: 24px;
             background-color: #FFFFFF;
             color: #000000;
-            border: 3px solid #000000;
+            border: 5px solid #000000;
             border-radius: 0;
             cursor: pointer;
-            transition: all 0.3s ease;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+            transition: all 0.1s ease;
+            box-shadow: 6px 6px 0 #000000;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .menu-button::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.6), transparent);
+            transition: left 0.5s;
+        }
+
+        .menu-button:hover::before {
+            left: 100%;
         }
 
         .menu-button:hover {
-            background-color: #F0F0F0;
-            transform: translateY(-2px);
-            box-shadow: 0 6px 8px rgba(0, 0, 0, 0.3);
+            background-color: #FFE066;
+            transform: translate(-3px, -3px);
+            box-shadow: 9px 9px 0 #000000;
         }
 
         .menu-button:active {
-            transform: translateY(0);
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+            transform: translate(3px, 3px);
+            box-shadow: 3px 3px 0 #000000;
+        }
+
+        .menu-button:first-of-type {
+            background-color: #90EE90;
+        }
+
+        .menu-button:first-of-type:hover {
+            background-color: #7FD87F;
+        }
+
+        .menu-button:last-of-type {
+            background-color: #FFB6C1;
+        }
+
+        .menu-button:last-of-type:hover {
+            background-color: #FFA0B0;
         }
 
         /* 게임 방법 팝업 */
