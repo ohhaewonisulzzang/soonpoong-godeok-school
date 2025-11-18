@@ -662,7 +662,7 @@
     <div class="credit credit-left">사운드제공:유튜버 행복한피자빵님(찐으로 허락 받음)</div>
     <div class="credit credit-right">MADE BY YOUNGJIN</div>
 
-    <audio id="bgMusic" loop autoplay>
+    <audio id="bgMusic" loop autoplay muted>
         <source src="assets/main.mp3" type="audio/mpeg">
     </audio>
 
@@ -1023,40 +1023,25 @@
             }
         }
 
-        // 음악 자동 재생 시도
-        function tryPlayMusic() {
-            if(bgMusic.paused && !isGameStarting && !isGamePlaying) {
-                bgMusic.play().catch(function(error) {
-                    console.log('자동 재생 대기 중...');
-                });
+        // 음악 자동 재생 (음소거 상태로 시작)
+        bgMusic.muted = true;
+        bgMusic.play().catch(function(error) {
+            console.log('자동 재생 실패:', error);
+        });
+
+        // 첫 사용자 인터랙션 시 음소거 해제
+        let musicUnmuted = false;
+        function unmuteMusic() {
+            if(!musicUnmuted) {
+                bgMusic.muted = false;
+                musicUnmuted = true;
+                console.log('음악 소리 켜짐');
             }
         }
 
-        // 즉시 재생 시도
-        tryPlayMusic();
-
-        // 페이지 로드 시 자동 클릭 시뮬레이션
-        window.addEventListener('load', function() {
-            // 자동 클릭 시도
-            setTimeout(function() {
-                document.body.click();
-            }, 100);
-
-            tryPlayMusic();
-        });
-
-        // DOMContentLoaded에서도 시도
-        document.addEventListener('DOMContentLoaded', function() {
-            setTimeout(function() {
-                document.body.click();
-            }, 50);
-
-            tryPlayMusic();
-        });
-
-        // 여러 사용자 인터랙션 이벤트에서 재생 시도
-        ['click', 'touchstart', 'keydown', 'mousemove'].forEach(function(event) {
-            document.addEventListener(event, tryPlayMusic, { once: true });
+        // 여러 사용자 인터랙션 이벤트에서 음소거 해제
+        ['click', 'touchstart', 'keydown'].forEach(function(event) {
+            document.addEventListener(event, unmuteMusic, { once: true });
         });
 
         // 화살표 아이콘 표시 함수
