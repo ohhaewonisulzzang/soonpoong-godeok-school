@@ -1920,6 +1920,39 @@
             showWordsAndHighlight();
         }
 
+        // 음악이 끝나고 다시 시작될 때 박자 맞추기
+        bgMusic.addEventListener('ended', function() {
+            if(!isGamePlaying) return;
+
+            // 현재 진행 중인 모든 interval/timeout 정리
+            clearAllIntervals();
+
+            // 모든 박스 리셋
+            const boxes = document.querySelectorAll('.game-box');
+            boxes.forEach(box => {
+                box.classList.remove('active');
+                const icon = box.querySelector('.arrow-icon');
+                icon.classList.remove('show', 'up', 'down');
+            });
+
+            // 모든 단어 리셋
+            document.getElementById('word1').textContent = '-';
+            document.getElementById('word2').textContent = '-';
+            document.getElementById('word3').textContent = '-';
+            document.getElementById('word4').textContent = '-';
+
+            // 음악 다시 재생
+            bgMusic.currentTime = 0;
+            bgMusic.play();
+
+            // 1초 후에 박스 강조 다시 시작
+            setTimeout(function() {
+                if(isGamePlaying) {
+                    startBoxHighlight();
+                }
+            }, 1000);
+        });
+
         // 게임 방법 팝업 제어
         let currentPopupPage = 1;
         const totalPopupPages = 5;
