@@ -1039,6 +1039,77 @@
                 min-width: 44px;
             }
         }
+
+        /* 전체화면 버튼 */
+        #fullscreenBtn {
+            position: fixed;
+            bottom: 15px;
+            right: 15px;
+            width: 50px;
+            height: 50px;
+            background-color: rgba(255, 255, 255, 0.9);
+            border: 3px solid #000000;
+            border-radius: 0;
+            cursor: pointer;
+            z-index: 9998;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            box-shadow: 4px 4px 0 #000000;
+            transition: all 0.2s ease;
+            font-family: 'Silkscreen', monospace;
+        }
+
+        #fullscreenBtn:hover {
+            background-color: #FFE066;
+            transform: translate(-2px, -2px);
+            box-shadow: 6px 6px 0 #000000;
+        }
+
+        #fullscreenBtn:active {
+            transform: translate(2px, 2px);
+            box-shadow: 2px 2px 0 #000000;
+        }
+
+        /* 전체화면 모드에서 숨기기 */
+        body.fullscreen-mode #fullscreenBtn {
+            display: none;
+        }
+
+        /* 전체화면 가로모드 최적화 */
+        body.fullscreen-mode {
+            overflow: hidden;
+        }
+
+        @media (orientation: landscape) and (max-height: 600px) {
+            body.fullscreen-mode h1 {
+                font-size: clamp(28px, 5vh, 50px);
+                top: 20px;
+            }
+
+            body.fullscreen-mode .button-container {
+                bottom: 30px;
+            }
+
+            body.fullscreen-mode .game-title {
+                font-size: clamp(24px, 4vh, 40px);
+                top: 20px;
+            }
+
+            body.fullscreen-mode .arrow-buttons {
+                left: 20px;
+            }
+
+            body.fullscreen-mode .game-boxes {
+                bottom: 30px;
+            }
+
+            body.fullscreen-mode .people-image {
+                width: clamp(250px, 35vh, 400px);
+                max-height: 70vh;
+            }
+        }
     </style>
 </head>
 <body>
@@ -1054,6 +1125,9 @@
             클릭하여 시작
         </button>
     </div>
+
+    <!-- 전체화면 버튼 -->
+    <button id="fullscreenBtn" title="전체화면 (가로모드)">⛶</button>
 
     <!-- Credits -->
     <div class="credit credit-left">사운드제공:유튜버 행복한피자빵님(찐으로 허락 받음)</div>
@@ -1969,6 +2043,68 @@
                 restartGame();
             } else if(e.key === 'm' || e.key === 'M') {
                 goToMainMenu();
+            }
+        });
+
+        // 전체화면 기능
+        const fullscreenBtn = document.getElementById('fullscreenBtn');
+
+        fullscreenBtn.addEventListener('click', async function() {
+            try {
+                const elem = document.documentElement;
+
+                // 전체화면 요청
+                if (elem.requestFullscreen) {
+                    await elem.requestFullscreen();
+                } else if (elem.webkitRequestFullscreen) {
+                    await elem.webkitRequestFullscreen();
+                } else if (elem.msRequestFullscreen) {
+                    await elem.msRequestFullscreen();
+                }
+
+                // 가로 모드 강제 (모바일 기기)
+                if (screen.orientation && screen.orientation.lock) {
+                    try {
+                        await screen.orientation.lock('landscape');
+                    } catch (err) {
+                        console.log('화면 회전 잠금 실패:', err);
+                    }
+                }
+
+                // fullscreen-mode 클래스 추가
+                document.body.classList.add('fullscreen-mode');
+
+            } catch (err) {
+                console.log('전체화면 전환 실패:', err);
+                alert('전체화면을 지원하지 않는 브라우저입니다.');
+            }
+        });
+
+        // 전체화면 종료 감지
+        document.addEventListener('fullscreenchange', function() {
+            if (!document.fullscreenElement) {
+                document.body.classList.remove('fullscreen-mode');
+                // 화면 회전 잠금 해제
+                if (screen.orientation && screen.orientation.unlock) {
+                    screen.orientation.unlock();
+                }
+            }
+        });
+
+        // 웹킷 브라우저용
+        document.addEventListener('webkitfullscreenchange', function() {
+            if (!document.webkitFullscreenElement) {
+                document.body.classList.remove('fullscreen-mode');
+                if (screen.orientation && screen.orientation.unlock) {
+                    screen.orientation.unlock();
+                }
+            }
+        });
+
+        // ESC 키로 전체화면 종료
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape' && document.fullscreenElement) {
+                document.exitFullscreen();
             }
         });
     </script>
