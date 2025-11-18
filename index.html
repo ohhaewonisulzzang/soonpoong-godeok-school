@@ -458,7 +458,7 @@
         }
 
         .gameover-text {
-            font-family: 'Silkscreen', 'Malgun Gothic', monospace;
+            font-family: 'Silkscreen', monospace;
             font-weight: bold;
             font-size: 100px;
             color: #FF0000;
@@ -471,6 +471,9 @@
                 0 0 40px rgba(255, 0, 0, 0.5);
             animation: gameOverPulse 1.5s ease-in-out infinite, gameOverShake 0.5s ease;
             letter-spacing: 8px;
+            image-rendering: pixelated;
+            image-rendering: -moz-crisp-edges;
+            image-rendering: crisp-edges;
         }
 
         @keyframes gameOverPulse {
@@ -495,7 +498,7 @@
         }
 
         .menu-button {
-            font-family: 'Silkscreen', 'Malgun Gothic', monospace;
+            font-family: 'Silkscreen', monospace;
             font-weight: bold;
             width: 300px;
             padding: 20px 40px;
@@ -509,6 +512,9 @@
             box-shadow: 6px 6px 0 #000000;
             position: relative;
             overflow: hidden;
+            image-rendering: pixelated;
+            image-rendering: -moz-crisp-edges;
+            image-rendering: crisp-edges;
         }
 
         .menu-button::before {
