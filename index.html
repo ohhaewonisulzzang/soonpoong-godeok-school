@@ -682,10 +682,6 @@
         <source src="assets/okay.mp3" type="audio/mpeg">
     </audio>
 
-    <audio id="tickSound">
-        <source src="assets/click.mp3" type="audio/mpeg">
-    </audio>
-
     <!-- 메인 화면 -->
     <div class="container" id="mainScreen">
         <!-- 사람 이미지 -->
@@ -880,7 +876,6 @@
         const hoSound = document.getElementById('hoSound');
         const jjaSound = document.getElementById('jjaSound');
         const okaySound = document.getElementById('okaySound');
-        const tickSound = document.getElementById('tickSound');
         let isGameStarting = false;
         let isGamePlaying = false;
         let currentPattern = []; // 현재 게임 패턴 저장
@@ -1282,10 +1277,6 @@
 
                         // 현재 박스 강조
                         boxes[currentBox].classList.add('active');
-
-                        // 틱 사운드 재생
-                        tickSound.currentTime = 0;
-                        tickSound.play();
 
                         // 현재 박스 인덱스 업데이트 및 입력 플래그 리셋
                         currentBoxIndex = currentBox;
