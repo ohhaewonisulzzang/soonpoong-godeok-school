@@ -1044,15 +1044,16 @@
         /* 전체화면 버튼 */
         #fullscreenBtn {
             position: fixed;
-            bottom: 15px;
-            right: 15px;
+            bottom: clamp(5px, 1vh, 10px);
+            right: clamp(5px, 1vw, 15px);
             width: 50px;
             height: 50px;
             background-color: transparent;
             border: none;
+            outline: none;
             border-radius: 0;
             cursor: pointer;
-            z-index: 9998;
+            z-index: 9999;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -1067,6 +1068,10 @@
                 -2px 2px 0 #000000,
                 0 0 10px rgba(255, 255, 255, 0.8);
             filter: drop-shadow(0 0 5px rgba(0, 0, 0, 0.5));
+        }
+
+        #fullscreenBtn:focus {
+            outline: none;
         }
 
         #fullscreenBtn:hover {
