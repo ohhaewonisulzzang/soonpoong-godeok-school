@@ -876,6 +876,13 @@
         const hoSound = document.getElementById('hoSound');
         const jjaSound = document.getElementById('jjaSound');
         const okaySound = document.getElementById('okaySound');
+
+        // 볼륨 설정
+        inGameMusic.volume = 0.5;
+        hoSound.volume = 0.7;
+        jjaSound.volume = 0.7;
+        okaySound.volume = 0.7;
+
         let isGameStarting = false;
         let isGamePlaying = false;
         let currentPattern = []; // 현재 게임 패턴 저장
@@ -1024,17 +1031,23 @@
 
         // 페이지 로드 시 음악 재생 시도
         window.addEventListener('load', function() {
+            bgMusic.volume = 0.5; // 볼륨 50%로 설정
             bgMusic.play().catch(function(error) {
                 console.log('자동 재생 실패, 사용자 인터랙션 필요');
             });
         });
 
-        // 사용자가 화면을 클릭하면 음악 재생 (메인 화면에서만)
-        document.body.addEventListener('click', function() {
-            if(bgMusic.paused && !isGameStarting) {
-                bgMusic.play();
+        // 사용자가 화면을 클릭/터치하면 음악 재생 (메인 화면에서만)
+        function tryPlayMainMusic() {
+            if(bgMusic.paused && !isGameStarting && !isGamePlaying) {
+                bgMusic.play().catch(function(error) {
+                    console.log('메인 음악 재생 시도 실패:', error);
+                });
             }
-        }, { once: true });
+        }
+
+        document.body.addEventListener('click', tryPlayMainMusic);
+        document.body.addEventListener('touchstart', tryPlayMainMusic);
 
         // 화살표 아이콘 표시 함수
         function showArrowIcon(direction) {
@@ -1146,10 +1159,13 @@
 
             // 메인 음악 정지
             bgMusic.pause();
+            bgMusic.currentTime = 0;
 
             // 게임 음악 시작
             inGameMusic.currentTime = 0;
-            inGameMusic.play();
+            inGameMusic.play().catch(function(error) {
+                console.log('카운트다운 음악 재생 실패:', error);
+            });
 
             // 카운트다운 오버레이 표시
             countdownOverlay.classList.add('active');
@@ -1186,7 +1202,9 @@
 
                     // 메인 음악 재생
                     bgMusic.currentTime = 0;
-                    bgMusic.play();
+                    bgMusic.play().catch(function(error) {
+                        console.log('게임 음악 재생 실패:', error);
+                    });
 
                     // 게임 시작
                     isGamePlaying = true;
@@ -1202,6 +1220,16 @@
                 // 게임이 중단되었으면 실행하지 않음
                 if(!isGamePlaying) return;
 
+                // 기존 interval 정리 (중복 실행 방지)
+                if(wordInterval) {
+                    clearInterval(wordInterval);
+                    wordInterval = null;
+                }
+                if(highlightInterval) {
+                    clearInterval(highlightInterval);
+                    highlightInterval = null;
+                }
+
                 // 새 패턴 생성
                 const pattern = generatePattern();
                 currentPattern = pattern;
@@ -1209,17 +1237,19 @@
                 // 첫 번째 단어를 즉시 표시
                 document.getElementById('word1').textContent = pattern[0];
 
-                // 나머지 단어들을 400ms 간격으로 순서대로 표시
+                // 나머지 단어들을 390ms 간격으로 순서대로 표시
                 let wordIndex = 1;
                 wordInterval = setInterval(function() {
                     // 게임이 중단되었으면 interval 정리
                     if(!isGamePlaying) {
                         clearInterval(wordInterval);
+                        wordInterval = null;
                         return;
                     }
 
                     if(wordIndex >= 4) {
                         clearInterval(wordInterval);
+                        wordInterval = null;
                         return;
                     }
 
@@ -1244,12 +1274,14 @@
                         // 게임이 중단되었으면 interval 정리
                         if(!isGamePlaying) {
                             clearInterval(highlightInterval);
+                            highlightInterval = null;
                             return;
                         }
 
                         // 모든 박스 다 강조했으면
                         if(currentBox >= 4) {
                             clearInterval(highlightInterval);
+                            highlightInterval = null;
                             // 모든 박스 강조 해제 및 아이콘 숨기기
                             boxes.forEach(box => {
                                 box.classList.remove('active');
@@ -1511,7 +1543,9 @@
 
             // 메인 음악 처음부터 재생
             bgMusic.currentTime = 0;
-            bgMusic.play();
+            bgMusic.play().catch(function(error) {
+                console.log('메인 음악 재생 실패:', error);
+            });
         }
 
         // 다시 시작 버튼 이벤트
