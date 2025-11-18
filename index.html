@@ -662,7 +662,7 @@
     <div class="credit credit-left">사운드제공:유튜버 행복한피자빵님(찐으로 허락 받음)</div>
     <div class="credit credit-right">MADE BY YOUNGJIN</div>
 
-    <audio id="bgMusic" loop>
+    <audio id="bgMusic" loop autoplay>
         <source src="assets/main.mp3" type="audio/mpeg">
     </audio>
 
@@ -1031,17 +1031,36 @@
 
         // 음악 재생 준비
         let musicStarted = false;
+        let autoplayAttempts = 0;
+        const MAX_AUTOPLAY_ATTEMPTS = 10;
 
-        // 페이지 로드 시 음악 재생 시도
-        window.addEventListener('load', function() {
-            bgMusic.volume = 0.5; // 볼륨 50%로 설정
+        // 음악 자동 재생 시도 함수
+        function attemptAutoplay() {
+            if(musicStarted || autoplayAttempts >= MAX_AUTOPLAY_ATTEMPTS) {
+                return;
+            }
+
+            autoplayAttempts++;
+            bgMusic.volume = 0.5;
             bgMusic.play().then(function() {
                 musicStarted = true;
                 console.log('배경 음악 자동 재생 성공');
             }).catch(function(error) {
-                console.log('자동 재생 실패, 사용자 인터랙션 필요');
+                console.log('자동 재생 시도 ' + autoplayAttempts + '/' + MAX_AUTOPLAY_ATTEMPTS);
+                if(autoplayAttempts < MAX_AUTOPLAY_ATTEMPTS) {
+                    setTimeout(attemptAutoplay, 200);
+                }
             });
-        });
+        }
+
+        // 페이지 로드 시 즉시 재생 시도
+        attemptAutoplay();
+
+        // DOMContentLoaded에서도 시도
+        document.addEventListener('DOMContentLoaded', attemptAutoplay);
+
+        // 페이지 로드 완료 시에도 시도
+        window.addEventListener('load', attemptAutoplay);
 
         // 사용자가 화면을 클릭/터치하면 음악 재생
         function tryPlayMainMusic() {
