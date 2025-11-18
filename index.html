@@ -33,7 +33,7 @@
         }
 
         h1 {
-            font-family: 'Silkscreen', 'Malgun Gothic', monospace;
+            font-family: 'Silkscreen', monospace;
             font-weight: bold;
             font-size: 80px;
             color: #FFFFFF;
@@ -43,11 +43,21 @@
             transform: translateX(-50%);
             width: 100%;
             text-shadow:
-                4px 0 0 #000000,
-                -4px 0 0 #000000,
-                0 4px 0 #000000,
-                0 -4px 0 #000000,
-                4px 4px 0 #000000;
+                4px 4px 0 #000000,
+                0 0 20px rgba(255, 255, 255, 0.6),
+                0 0 40px rgba(173, 216, 230, 0.5);
+            -webkit-text-stroke: 1px #000000;
+            text-stroke: 1px #000000;
+            animation: titleFloat 3s ease-in-out infinite;
+        }
+
+        @keyframes titleFloat {
+            0%, 100% {
+                transform: translateX(-50%) translateY(0px);
+            }
+            50% {
+                transform: translateX(-50%) translateY(-10px);
+            }
         }
 
         h1 span {
@@ -103,29 +113,62 @@
         }
 
         button {
-            font-family: 'Silkscreen', 'Malgun Gothic', monospace;
+            font-family: 'Silkscreen', monospace;
             font-weight: bold;
             width: 250px;
             padding: 20px 40px;
             font-size: 20px;
             background-color: #FFFFFF;
             color: #000000;
-            border: 4px solid #000000;
+            border: 5px solid #000000;
             border-radius: 0;
             cursor: pointer;
             transition: all 0.1s ease;
-            box-shadow: 4px 4px 0 #000000;
+            box-shadow: 6px 6px 0 #000000;
+            position: relative;
+            overflow: hidden;
+        }
+
+        button::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.6), transparent);
+            transition: left 0.5s;
+        }
+
+        button:hover::before {
+            left: 100%;
         }
 
         button:hover {
             background-color: #FFE066;
-            transform: translate(-2px, -2px);
-            box-shadow: 6px 6px 0 #000000;
+            transform: translate(-3px, -3px);
+            box-shadow: 9px 9px 0 #000000;
         }
 
         button:active {
-            transform: translate(2px, 2px);
-            box-shadow: 2px 2px 0 #000000;
+            transform: translate(3px, 3px);
+            box-shadow: 3px 3px 0 #000000;
+        }
+
+        #startGame {
+            background-color: #90EE90;
+        }
+
+        #startGame:hover {
+            background-color: #7FD87F;
+        }
+
+        #howToPlay {
+            background-color: #FFB6C1;
+        }
+
+        #howToPlay:hover {
+            background-color: #FFA0B0;
         }
 
         /* 게임 화면 */
@@ -141,7 +184,7 @@
         }
 
         .game-title {
-            font-family: 'Silkscreen', 'Malgun Gothic', monospace;
+            font-family: 'Silkscreen', monospace;
             font-weight: bold;
             font-size: 48px;
             color: #FFFFFF;
@@ -152,14 +195,15 @@
             width: 100%;
             text-align: center;
             text-shadow:
-                3px 0 0 #000000,
-                -3px 0 0 #000000,
-                0 3px 0 #000000,
-                0 -3px 0 #000000,
-                3px 3px 0 #000000;
+                3px 3px 0 #000000,
+                0 0 20px rgba(255, 255, 255, 0.8),
+                0 0 40px rgba(173, 216, 230, 0.5);
+            -webkit-text-stroke: 1px #000000;
+            text-stroke: 1px #000000;
             display: flex;
             justify-content: center;
             gap: 40px;
+            image-rendering: pixelated;
         }
 
         .game-title span {
@@ -184,25 +228,58 @@
             font-size: 40px;
             background-color: #FFFFFF;
             color: #000000;
-            border: 4px solid #000000;
+            border: 5px solid #000000;
             border-radius: 0;
             cursor: pointer;
             transition: all 0.1s ease;
-            box-shadow: 4px 4px 0 #000000;
+            box-shadow: 6px 6px 0 #000000;
             display: flex;
             align-items: center;
             justify-content: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .arrow-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.6), transparent);
+            transition: left 0.5s;
+        }
+
+        .arrow-btn:hover::before {
+            left: 100%;
         }
 
         .arrow-btn:hover {
             background-color: #FFE066;
-            transform: translate(-2px, -2px);
-            box-shadow: 6px 6px 0 #000000;
+            transform: translate(-3px, -3px);
+            box-shadow: 9px 9px 0 #000000;
         }
 
         .arrow-btn:active {
-            transform: translate(2px, 2px);
-            box-shadow: 2px 2px 0 #000000;
+            transform: translate(3px, 3px);
+            box-shadow: 3px 3px 0 #000000;
+        }
+
+        #upBtn {
+            background-color: #ADD8E6;
+        }
+
+        #upBtn:hover {
+            background-color: #9BC8D6;
+        }
+
+        #downBtn {
+            background-color: #FFB6C1;
+        }
+
+        #downBtn:hover {
+            background-color: #FFA0B0;
         }
 
         .game-boxes {
@@ -218,9 +295,9 @@
             width: 100px;
             height: 100px;
             background-color: #FFFFFF;
-            border: 3px solid #000000;
+            border: 5px solid #000000;
             border-radius: 0;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+            box-shadow: 4px 4px 0 #000000;
             transition: all 0.1s ease;
             position: relative;
             display: flex;
@@ -229,9 +306,13 @@
         }
 
         .game-box.active {
-            border: 6px solid #FF0000;
-            box-shadow: 0 0 20px rgba(255, 0, 0, 0.8);
-            transform: scale(1.1);
+            border: 5px solid #FF0000;
+            box-shadow:
+                6px 6px 0 #000000,
+                0 0 20px rgba(255, 0, 0, 0.8),
+                0 0 40px rgba(255, 0, 0, 0.5);
+            transform: scale(1.15) translate(-2px, -2px);
+            background-color: #FFF5F5;
         }
 
         .arrow-icon {
@@ -268,13 +349,19 @@
             left: 50%;
             top: 50%;
             transform: translate(-50%, -50%) scale(0);
-            font-family: 'Malgun Gothic', sans-serif;
+            font-family: 'Silkscreen', monospace;
             font-weight: bold;
             font-size: 300px;
-            color: rgba(91, 97, 91, 0.644);
+            color: #90EE90;
             z-index: 1500;
             opacity: 0;
             pointer-events: none;
+            text-shadow:
+                5px 5px 0 #000000,
+                0 0 30px rgba(144, 238, 144, 0.8),
+                0 0 60px rgba(144, 238, 144, 0.5);
+            -webkit-text-stroke: 3px #000000;
+            text-stroke: 3px #000000;
         }
 
         #okaySign.show {
@@ -400,16 +487,20 @@
         }
 
         .countdown-number {
-            font-family: 'Malgun Gothic', 'Apple SD Gothic Neo', sans-serif;
+            font-family: 'Silkscreen', monospace;
             font-weight: bold;
             font-size: 200px;
-            color: rgba(255, 255, 255, 0.7);
-            -webkit-text-stroke: 5px rgba(0, 0, 0, 0.7);
-            text-stroke: 5px rgba(0, 0, 0, 0.7);
+            color: #FFFFFF;
+            -webkit-text-stroke: 3px #000000;
+            text-stroke: 3px #000000;
             text-shadow:
-                5px 5px 0 rgba(0, 0, 0, 0.7),
-                10px 10px 0 rgba(0, 0, 0, 0.7);
+                5px 5px 0 #000000,
+                0 0 30px rgba(255, 255, 255, 0.8),
+                0 0 60px rgba(173, 216, 230, 0.6);
             animation: countdownBounce 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+            image-rendering: pixelated;
+            image-rendering: -moz-crisp-edges;
+            image-rendering: crisp-edges;
         }
 
         @keyframes countdownBounce {
@@ -590,17 +681,24 @@
         }
 
         .popup-header {
-            background-color: #ADD8E6;
+            background: linear-gradient(180deg, #ADD8E6 0%, #90C8E6 100%);
             padding: 30px;
             text-align: center;
-            border-bottom: 3px solid #000000;
+            border-bottom: 5px solid #000000;
+            box-shadow: 0 4px 0 rgba(0, 0, 0, 0.3);
         }
 
         .popup-title {
-            font-family: 'Malgun Gothic', sans-serif;
+            font-family: 'Silkscreen', monospace;
             font-weight: bold;
             font-size: 36px;
-            color: #000000;
+            color: #FFFFFF;
+            text-shadow:
+                3px 3px 0 #000000,
+                0 0 15px rgba(255, 255, 255, 0.8);
+            -webkit-text-stroke: 1px #000000;
+            text-stroke: 1px #000000;
+            image-rendering: pixelated;
         }
 
         .popup-body {
@@ -618,27 +716,31 @@
         }
 
         .popup-page h2 {
-            font-family: 'Malgun Gothic', sans-serif;
+            font-family: 'Silkscreen', monospace;
             font-weight: bold;
             font-size: 28px;
             color: #000000;
             margin-bottom: 20px;
+            text-shadow: 2px 2px 0 rgba(0, 0, 0, 0.1);
+            image-rendering: pixelated;
         }
 
         .popup-page p {
-            font-family: 'Malgun Gothic', sans-serif;
-            font-size: 18px;
+            font-family: 'Silkscreen', monospace;
+            font-size: 14px;
             line-height: 1.8;
             color: #333333;
             margin-bottom: 15px;
+            image-rendering: pixelated;
         }
 
         .popup-page ul {
-            font-family: 'Malgun Gothic', sans-serif;
-            font-size: 18px;
+            font-family: 'Silkscreen', monospace;
+            font-size: 14px;
             line-height: 2;
             color: #333333;
             margin-left: 20px;
+            image-rendering: pixelated;
         }
 
         .popup-page .highlight {
@@ -658,32 +760,42 @@
         }
 
         .popup-nav-button {
-            font-family: 'Malgun Gothic', sans-serif;
+            font-family: 'Silkscreen', monospace;
             font-weight: bold;
             padding: 12px 30px;
             font-size: 18px;
             background-color: #FFFFFF;
             color: #000000;
-            border: 3px solid #000000;
+            border: 4px solid #000000;
             border-radius: 0;
             cursor: pointer;
-            transition: all 0.3s ease;
+            transition: all 0.1s ease;
+            box-shadow: 4px 4px 0 #000000;
         }
 
         .popup-nav-button:hover {
             background-color: #ADD8E6;
-            transform: scale(1.05);
+            transform: translate(-2px, -2px);
+            box-shadow: 6px 6px 0 #000000;
+        }
+
+        .popup-nav-button:active {
+            transform: translate(2px, 2px);
+            box-shadow: 2px 2px 0 #000000;
         }
 
         .popup-nav-button:disabled {
             opacity: 0.3;
             cursor: not-allowed;
+            transform: translate(0, 0);
+            box-shadow: 4px 4px 0 #000000;
         }
 
         .popup-page-indicator {
-            font-family: 'Malgun Gothic', sans-serif;
+            font-family: 'Silkscreen', monospace;
             font-size: 16px;
             color: #666666;
+            image-rendering: pixelated;
         }
 
         .popup-close {
@@ -694,7 +806,7 @@
             height: 40px;
             background-color: #FF0000;
             color: #FFFFFF;
-            border: 3px solid #000000;
+            border: 4px solid #000000;
             border-radius: 0;
             font-size: 24px;
             font-weight: bold;
@@ -702,23 +814,36 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            transition: all 0.3s ease;
+            transition: all 0.1s ease;
+            box-shadow: 4px 4px 0 #000000;
         }
 
         .popup-close:hover {
             background-color: #CC0000;
-            transform: scale(1.1);
+            transform: translate(-2px, -2px);
+            box-shadow: 6px 6px 0 #000000;
+        }
+
+        .popup-close:active {
+            transform: translate(2px, 2px);
+            box-shadow: 2px 2px 0 #000000;
         }
 
         /* 크레딧 */
         .credit {
             position: fixed;
             bottom: 10px;
-            font-family: 'Malgun Gothic', sans-serif;
-            font-size: 18px;
+            font-family: 'Silkscreen', monospace;
+            font-size: 14px;
             font-weight: bold;
-            color: #333333;
+            color: #FFFFFF;
+            text-shadow:
+                2px 2px 0 #000000,
+                0 0 10px rgba(255, 255, 255, 0.5);
+            -webkit-text-stroke: 0.5px #000000;
+            text-stroke: 0.5px #000000;
             z-index: 100;
+            image-rendering: pixelated;
         }
 
         .credit-left {
