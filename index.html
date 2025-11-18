@@ -1029,25 +1029,34 @@
             }
         }
 
+        // 음악 재생 준비
+        let musicStarted = false;
+
         // 페이지 로드 시 음악 재생 시도
         window.addEventListener('load', function() {
             bgMusic.volume = 0.5; // 볼륨 50%로 설정
-            bgMusic.play().catch(function(error) {
+            bgMusic.play().then(function() {
+                musicStarted = true;
+                console.log('배경 음악 자동 재생 성공');
+            }).catch(function(error) {
                 console.log('자동 재생 실패, 사용자 인터랙션 필요');
             });
         });
 
-        // 사용자가 화면을 클릭/터치하면 음악 재생 (메인 화면에서만)
+        // 사용자가 화면을 클릭/터치하면 음악 재생
         function tryPlayMainMusic() {
-            if(bgMusic.paused && !isGameStarting && !isGamePlaying) {
-                bgMusic.play().catch(function(error) {
+            if(!musicStarted || (bgMusic.paused && !isGameStarting && !isGamePlaying)) {
+                bgMusic.play().then(function() {
+                    musicStarted = true;
+                    console.log('배경 음악 재생 시작');
+                }).catch(function(error) {
                     console.log('메인 음악 재생 시도 실패:', error);
                 });
             }
         }
 
-        document.body.addEventListener('click', tryPlayMainMusic);
-        document.body.addEventListener('touchstart', tryPlayMainMusic);
+        document.body.addEventListener('click', tryPlayMainMusic, { capture: true });
+        document.body.addEventListener('touchstart', tryPlayMainMusic, { capture: true });
 
         // 화살표 아이콘 표시 함수
         function showArrowIcon(direction) {
@@ -1106,6 +1115,15 @@
         });
 
         document.getElementById('startGame').addEventListener('click', function(e) {
+            // 메인 음악이 재생 중이 아니면 재생 시도
+            if(bgMusic.paused) {
+                bgMusic.play().then(function() {
+                    musicStarted = true;
+                }).catch(function(error) {
+                    console.log('메인 음악 재생 실패:', error);
+                });
+            }
+
             // 기존 interval 모두 정리
             clearAllIntervals();
 
@@ -1397,6 +1415,15 @@
 
         // 게임 방법 버튼
         document.getElementById('howToPlay').addEventListener('click', function() {
+            // 메인 음악이 재생 중이 아니면 재생 시도
+            if(bgMusic.paused) {
+                bgMusic.play().then(function() {
+                    musicStarted = true;
+                }).catch(function(error) {
+                    console.log('메인 음악 재생 실패:', error);
+                });
+            }
+
             currentPopupPage = 1;
             updatePopupPage();
             document.getElementById('howToPlayPopup').classList.add('active');
@@ -1543,7 +1570,10 @@
 
             // 메인 음악 처음부터 재생
             bgMusic.currentTime = 0;
-            bgMusic.play().catch(function(error) {
+            bgMusic.play().then(function() {
+                musicStarted = true;
+                console.log('메인 메뉴 음악 재생');
+            }).catch(function(error) {
                 console.log('메인 음악 재생 실패:', error);
             });
         }
