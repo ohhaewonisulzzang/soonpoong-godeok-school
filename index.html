@@ -26,6 +26,7 @@
             image-rendering: pixelated;
             image-rendering: -moz-crisp-edges;
             image-rendering: crisp-edges;
+            
         }
 
         .container {
@@ -1047,29 +1048,40 @@
             right: 15px;
             width: 50px;
             height: 50px;
-            background-color: rgba(255, 255, 255, 0.9);
-            border: 3px solid #000000;
+            background-color: transparent;
+            border: none;
             border-radius: 0;
             cursor: pointer;
             z-index: 9998;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 24px;
-            box-shadow: 4px 4px 0 #000000;
+            font-size: 32px;
             transition: all 0.2s ease;
             font-family: 'Silkscreen', monospace;
+            color: #FFFFFF;
+            text-shadow:
+                2px 2px 0 #000000,
+                -2px -2px 0 #000000,
+                2px -2px 0 #000000,
+                -2px 2px 0 #000000,
+                0 0 10px rgba(255, 255, 255, 0.8);
+            filter: drop-shadow(0 0 5px rgba(0, 0, 0, 0.5));
         }
 
         #fullscreenBtn:hover {
-            background-color: #FFE066;
-            transform: translate(-2px, -2px);
-            box-shadow: 6px 6px 0 #000000;
+            transform: scale(1.2);
+            color: #FFE066;
+            text-shadow:
+                2px 2px 0 #000000,
+                -2px -2px 0 #000000,
+                2px -2px 0 #000000,
+                -2px 2px 0 #000000,
+                0 0 20px rgba(255, 224, 102, 1);
         }
 
         #fullscreenBtn:active {
-            transform: translate(2px, 2px);
-            box-shadow: 2px 2px 0 #000000;
+            transform: scale(1.1);
         }
 
         /* 전체화면 모드에서 숨기기 */
