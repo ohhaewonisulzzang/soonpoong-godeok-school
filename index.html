@@ -662,7 +662,7 @@
     <div class="credit credit-left">사운드제공:유튜버 행복한피자빵님(찐으로 허락 받음)</div>
     <div class="credit credit-right">MADE BY YOUNGJIN</div>
 
-    <audio id="bgMusic" loop>
+    <audio id="bgMusic" loop autoplay>
         <source src="assets/main.mp3" type="audio/mpeg">
     </audio>
 
@@ -1023,19 +1023,28 @@
             }
         }
 
-        // 페이지 로드 시 음악 재생 시도
-        window.addEventListener('load', function() {
-            bgMusic.play().catch(function(error) {
-                console.log('자동 재생 실패, 사용자 인터랙션 필요');
-            });
-        });
-
-        // 사용자가 화면을 클릭하면 음악 재생 (메인 화면에서만)
-        document.body.addEventListener('click', function() {
-            if(bgMusic.paused && !isGameStarting) {
-                bgMusic.play();
+        // 음악 자동 재생 시도
+        function tryPlayMusic() {
+            if(bgMusic.paused && !isGameStarting && !isGamePlaying) {
+                bgMusic.play().catch(function(error) {
+                    console.log('자동 재생 대기 중...');
+                });
             }
-        }, { once: true });
+        }
+
+        // 즉시 재생 시도
+        tryPlayMusic();
+
+        // 페이지 로드 시 재생 시도
+        window.addEventListener('load', tryPlayMusic);
+
+        // DOMContentLoaded에서도 시도
+        document.addEventListener('DOMContentLoaded', tryPlayMusic);
+
+        // 여러 사용자 인터랙션 이벤트에서 재생 시도
+        ['click', 'touchstart', 'keydown', 'mousemove'].forEach(function(event) {
+            document.addEventListener(event, tryPlayMusic, { once: true });
+        });
 
         // 화살표 아이콘 표시 함수
         function showArrowIcon(direction) {
