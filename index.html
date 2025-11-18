@@ -658,11 +658,21 @@
     </style>
 </head>
 <body>
+    <!-- 로딩 화면 -->
+    <div id="loadingScreen" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: #ADD8E6; display: flex; flex-direction: column; justify-content: center; align-items: center; z-index: 9999;">
+        <div style="font-family: 'Silkscreen', 'Malgun Gothic', monospace; font-size: 48px; color: #FFFFFF; text-shadow: 3px 0 0 #000000, -3px 0 0 #000000, 0 3px 0 #000000, 0 -3px 0 #000000; margin-bottom: 30px;">
+            로딩 중...
+        </div>
+        <div style="width: 200px; height: 20px; border: 3px solid #000000; background-color: #FFFFFF;">
+            <div id="loadingBar" style="width: 0%; height: 100%; background-color: #FFE066; transition: width 0.1s linear;"></div>
+        </div>
+    </div>
+
     <!-- Credits -->
     <div class="credit credit-left">사운드제공:유튜버 행복한피자빵님(찐으로 허락 받음)</div>
     <div class="credit credit-right">MADE BY YOUNGJIN</div>
 
-    <audio id="bgMusic" loop autoplay>
+    <audio id="bgMusic" loop>
         <source src="assets/main.mp3" type="audio/mpeg">
     </audio>
 
@@ -1023,19 +1033,49 @@
             }
         }
 
-        // 페이지 로드 시 음악 재생 시도
+        // 로딩 화면 처리
         window.addEventListener('load', function() {
-            bgMusic.play().catch(function(error) {
-                console.log('자동 재생 실패, 사용자 인터랙션 필요');
-            });
-        });
+            const loadingScreen = document.getElementById('loadingScreen');
+            const loadingBar = document.getElementById('loadingBar');
+            let progress = 0;
 
-        // 사용자가 화면을 클릭하면 음악 재생
-        document.body.addEventListener('click', function() {
-            if(bgMusic.paused && !isGameStarting) {
-                bgMusic.play();
-            }
-        }, { once: true });
+            // Web Audio API로 무음 재생
+            const AudioContext = window.AudioContext || window.webkitAudioContext;
+            const audioContext = new AudioContext();
+            const buffer = audioContext.createBuffer(1, audioContext.sampleRate * 1, audioContext.sampleRate);
+            const source = audioContext.createBufferSource();
+            source.buffer = buffer;
+            source.connect(audioContext.destination);
+            source.start(0);
+
+            // 로딩 바 애니메이션
+            const loadingInterval = setInterval(function() {
+                progress += 10;
+                loadingBar.style.width = progress + '%';
+
+                if(progress >= 100) {
+                    clearInterval(loadingInterval);
+
+                    // 로딩 완료 후 음악 재생 및 화면 전환
+                    setTimeout(function() {
+                        // 음악 재생 시작
+                        bgMusic.play().then(function() {
+                            console.log('음악 자동 재생 성공!');
+                        }).catch(function(error) {
+                            console.log('음악 재생 실패:', error);
+                        });
+
+                        // 로딩 화면 페이드아웃
+                        loadingScreen.style.transition = 'opacity 0.5s ease';
+                        loadingScreen.style.opacity = '0';
+
+                        setTimeout(function() {
+                            loadingScreen.style.display = 'none';
+                        }, 500);
+                    }, 200);
+                }
+            }, 100);
+        });
 
         // 화살표 아이콘 표시 함수
         function showArrowIcon(direction) {
