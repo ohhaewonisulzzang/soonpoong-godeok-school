@@ -18,7 +18,7 @@
 
         body {
             background-color: #ADD8E6;
-            font-family: 'Silkscreen', 'Malgun Gothic', monospace;
+            font-family: 'Silkscreen', monospace;
             min-height: 100vh;
             position: relative;
             overflow: hidden;
@@ -26,7 +26,6 @@
             image-rendering: pixelated;
             image-rendering: -moz-crisp-edges;
             image-rendering: crisp-edges;
-            
         }
 
         .container {
@@ -877,6 +876,42 @@
             text-align: right;
         }
 
+        /* 전체화면 권장 텍스트 */
+        #fullscreenNotice {
+            position: fixed;
+            top: 15px;
+            right: 15px;
+            font-family: 'Silkscreen', monospace;
+            font-size: clamp(10px, 1.8vw, 16px);
+            font-weight: bold;
+            color: #FFFFFF;
+            text-shadow:
+                2px 2px 0 #000000,
+                0 0 10px rgba(255, 255, 255, 0.6);
+            -webkit-text-stroke: 0.5px #000000;
+            text-stroke: 0.5px #000000;
+            z-index: 100;
+            image-rendering: pixelated;
+            padding: 8px 12px;
+            background-color: rgba(255, 102, 102, 0.7);
+            border: 2px solid #000000;
+            box-shadow: 3px 3px 0 #000000;
+            animation: noticeFloat 2s ease-in-out infinite;
+        }
+
+        @keyframes noticeFloat {
+            0%, 100% {
+                transform: translateY(0px);
+            }
+            50% {
+                transform: translateY(-5px);
+            }
+        }
+
+        #gameScreen.active ~ #fullscreenNotice {
+            display: none;
+        }
+
         /* 모바일 최적화 */
         @media (max-width: 768px) {
             h1 {
@@ -1132,16 +1167,19 @@
 <body>
     <!-- 로딩 화면 -->
     <div id="loadingScreen" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: #ADD8E6; display: flex; flex-direction: column; justify-content: center; align-items: center; z-index: 9999; padding: 20px;">
-        <div id="loadingText" style="font-family: 'Silkscreen', 'Malgun Gothic', monospace; font-size: clamp(24px, 6vw, 48px); color: #FFFFFF; text-shadow: 3px 0 0 #000000, -3px 0 0 #000000, 0 3px 0 #000000, 0 -3px 0 #000000; margin-bottom: clamp(15px, 3vh, 30px); text-align: center;">
+        <div id="loadingText" style="font-family: 'Silkscreen', monospace; font-size: clamp(24px, 6vw, 48px); color: #FFFFFF; text-shadow: 3px 0 0 #000000, -3px 0 0 #000000, 0 3px 0 #000000, 0 -3px 0 #000000; margin-bottom: clamp(15px, 3vh, 30px); text-align: center;">
             로딩 중...
         </div>
         <div id="loadingBarContainer" style="width: clamp(150px, 40vw, 200px); height: clamp(15px, 3vh, 20px); border: 3px solid #000000; background-color: #FFFFFF; margin-bottom: clamp(15px, 3vh, 30px);">
             <div id="loadingBar" style="width: 0%; height: 100%; background-color: #FFE066; transition: width 0.1s linear;"></div>
         </div>
-        <button id="startButton" style="display: none; font-family: 'Silkscreen', 'Malgun Gothic', monospace; font-weight: bold; font-size: clamp(16px, 2.5vw, 24px); padding: clamp(15px, 2vh, 20px) clamp(20px, 4vw, 40px); background-color: #FFFFFF; color: #000000; border: clamp(3px, 0.5vw, 4px) solid #000000; cursor: pointer; box-shadow: 4px 4px 0 #000000; transition: all 0.1s ease;" onmouseover="this.style.backgroundColor='#FFE066'; this.style.transform='translate(-2px, -2px)'; this.style.boxShadow='6px 6px 0 #000000';" onmouseout="this.style.backgroundColor='#FFFFFF'; this.style.transform='translate(0, 0)'; this.style.boxShadow='4px 4px 0 #000000';" onmousedown="this.style.transform='translate(2px, 2px)'; this.style.boxShadow='2px 2px 0 #000000';">
+        <button id="startButton" style="display: none; font-family: 'Silkscreen', monospace; font-weight: bold; font-size: clamp(16px, 2.5vw, 24px); padding: clamp(15px, 2vh, 20px) clamp(20px, 4vw, 40px); background-color: #FFFFFF; color: #000000; border: clamp(3px, 0.5vw, 4px) solid #000000; cursor: pointer; box-shadow: 4px 4px 0 #000000; transition: all 0.1s ease;" onmouseover="this.style.backgroundColor='#FFE066'; this.style.transform='translate(-2px, -2px)'; this.style.boxShadow='6px 6px 0 #000000';" onmouseout="this.style.backgroundColor='#FFFFFF'; this.style.transform='translate(0, 0)'; this.style.boxShadow='4px 4px 0 #000000';" onmousedown="this.style.transform='translate(2px, 2px)'; this.style.boxShadow='2px 2px 0 #000000';">
             클릭하여 시작
         </button>
     </div>
+
+    <!-- 전체화면 권장 안내 (메인화면에만 표시) -->
+    <div id="fullscreenNotice">전체화면을 권장합니다</div>
 
     <!-- 전체화면 버튼 -->
     <button id="fullscreenBtn" title="전체화면 (가로모드)">⛶</button>
@@ -1651,6 +1689,9 @@
             // 메인 화면 숨기기
             document.getElementById('mainScreen').style.display = 'none';
 
+            // 전체화면 권장 안내 숨기기
+            document.getElementById('fullscreenNotice').style.display = 'none';
+
             // 게임 화면 먼저 표시
             document.getElementById('gameScreen').classList.add('active');
 
@@ -2014,6 +2055,9 @@
 
             // 메인 화면 표시
             document.getElementById('mainScreen').style.display = 'block';
+
+            // 전체화면 권장 안내 다시 보이기
+            document.getElementById('fullscreenNotice').style.display = 'block';
 
             // 박스 아이콘 모두 숨기기
             document.querySelectorAll('.game-box').forEach(box => {
