@@ -1035,11 +1035,24 @@
         // 즉시 재생 시도
         tryPlayMusic();
 
-        // 페이지 로드 시 재생 시도
-        window.addEventListener('load', tryPlayMusic);
+        // 페이지 로드 시 자동 클릭 시뮬레이션
+        window.addEventListener('load', function() {
+            // 자동 클릭 시도
+            setTimeout(function() {
+                document.body.click();
+            }, 100);
+
+            tryPlayMusic();
+        });
 
         // DOMContentLoaded에서도 시도
-        document.addEventListener('DOMContentLoaded', tryPlayMusic);
+        document.addEventListener('DOMContentLoaded', function() {
+            setTimeout(function() {
+                document.body.click();
+            }, 50);
+
+            tryPlayMusic();
+        });
 
         // 여러 사용자 인터랙션 이벤트에서 재생 시도
         ['click', 'touchstart', 'keydown', 'mousemove'].forEach(function(event) {
